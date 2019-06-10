@@ -67,7 +67,7 @@ public class ApplyTemplateAction extends AnAction implements DumbAware {
         String branchName = extractBranchName(project);
         String presentCommitMessage = getPresetCommitMessage(e);
 
-        PluginConfig config = new PluginConfig();
+        PluginConfig config = PluginConfig.getInstance(project);
 
         String commitTemplate = config.getCommitMessageTemplate(project);
         if (!commitTemplate.isEmpty()) {
