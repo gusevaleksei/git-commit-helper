@@ -1,0 +1,45 @@
+<idea-plugin>
+    <id>GitCommitHelper</id>
+    <name>Git Commit Helper</name>
+    <version>0.0.5</version>
+
+    <description><![CDATA[
+    <p>Adds a button to the commit dialog, that replace commit message with a template.</p>
+    ]]></description>
+
+    <change-notes><![CDATA[
+    <p>0.0.5</p>
+    ]]>
+    </change-notes>
+
+    <idea-version since-build="135.1230"/>
+    <depends>com.intellij.modules.vcs</depends>
+    <depends>Git4Idea</depends>
+
+    <actions>
+        <action id="git_commit_helper.Button" class="git_commit_helper.ApplyTemplateAction" text="Apply template"
+                description="Apply template"
+                icon="AllIcons.Actions.Download">
+            <add-to-group group-id="Vcs.MessageActionGroup" anchor="first"/>
+        </action>
+    </actions>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService
+                serviceInterface="git_commit_helper.PluginGlobalConfig"
+                serviceImplementation="git_commit_helper.PluginGlobalConfig"
+        />
+        <projectService
+                serviceInterface="git_commit_helper.PluginProjectConfig"
+                serviceImplementation="git_commit_helper.PluginProjectConfig"
+        />
+
+        <projectConfigurable
+                groupId="tools"
+                displayName="Git Commit Helper"
+                id="preferences.CommitMessageTemplateConfigurable"
+                instance="git_commit_helper.GitCommitHelperSettings"
+        />
+    </extensions>
+
+</idea-plugin>
