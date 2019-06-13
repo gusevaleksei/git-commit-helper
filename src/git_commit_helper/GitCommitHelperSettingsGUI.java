@@ -1,5 +1,6 @@
 package git_commit_helper;
 
+import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.project.Project;
 import git_commit_helper.PluginGlobalConfig.CommitState;
 
@@ -21,6 +22,7 @@ public class GitCommitHelperSettingsGUI {
     private PluginProjectConfig projectConfig;
 
     private PluginConfig config;
+    private boolean currentProjectSettings;
 
     private CommitState getUICState() {
         CommitState uiCState = new CommitState();
@@ -32,17 +34,20 @@ public class GitCommitHelperSettingsGUI {
     private void setProjectLevel() {
         globalSettingsRadio.setSelected(false);
         projectSettingsRadio.setSelected(true);
+        currentProjectSettings = true;
     }
 
     private void setGlobalLevel() {
         globalSettingsRadio.setSelected(true);
         projectSettingsRadio.setSelected(false);
+        currentProjectSettings = false;
     }
 
     void loadFields(boolean perProjectSettings) {
         CommitState CState = config.getCommitState(perProjectSettings);
         commitMessageTextBox.setText(CState.commitMessage);
         regexpPatternTextField.setText(CState.branchRegexp);
+        currentProjectSettings = perProjectSettings;
     }
 
     void createUI(Project project) {
@@ -52,9 +57,6 @@ public class GitCommitHelperSettingsGUI {
 
         if (!project.isOpen()) {
             setGlobalLevel();
-//            globalSettingsRadio.setVisible(false);
-//            projectSettingsRadio.setVisible(false);
-
             perProjectSettings = false;
         } else {
             perProjectSettings = config.isProjectSettingsLevel(project);
@@ -76,11 +78,19 @@ public class GitCommitHelperSettingsGUI {
     boolean isModified(Project project) {
 //        config = new PluginConfig();
 
+        boolean isModified = false;
+
         boolean isConfProjLevel = config.isProjectSettingsLevel(project);
+        boolean isCurrProjLevel = currentProjectSettings;
         boolean isUIProjLevel = projectSettingsRadio.isSelected();
-        //PluginManager.getLogger().warn("isModified RADIOS "+isConfProjLevel+" -> "+isUIProjLevel);
-        if (isConfProjLevel != isUIProjLevel) {
+//        PluginManager.getLogger().warn("isModified "+isConfProjLevel+" "+isCurrProjLevel+" "+isUIProjLevel);
+
+        if (isCurrProjLevel != isUIProjLevel) {
             loadFields(isUIProjLevel);
+        }
+
+        if (isUIProjLevel != isConfProjLevel) {
+            isModified = true;
         }
 
         boolean perProjectSettings = projectSettingsRadio.isSelected();
@@ -89,18 +99,20 @@ public class GitCommitHelperSettingsGUI {
         boolean templateChanged = !uiCState.commitMessage.equals(CState.commitMessage);
         boolean regexpChanged = !uiCState.branchRegexp.equals(CState.branchRegexp);
 
-        boolean fieldsChanged = templateChanged || regexpChanged;
+        boolean fieldsChanged = isModified || templateChanged || regexpChanged;
 
         //PluginManager.getLogger().error("GitCommitHelperSettings JComponent createComponent");
-        //PluginManager.getLogger().warn("isModified fields "+fieldsChanged);
+        PluginManager.getLogger().warn("isModified finally " + fieldsChanged);
 
         return fieldsChanged;
     }
 
     void apply(Project project) {
         boolean perProjectSettings = projectSettingsRadio.isSelected();
+        PluginManager.getLogger().warn("apply per project " + perProjectSettings + " current:" + currentProjectSettings);
         config.setSettingsLevel(project, perProjectSettings);
         config.setCommitState(getUICState(), perProjectSettings);
+        currentProjectSettings = perProjectSettings;
     }
 
     void reset(Project project) {
