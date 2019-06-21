@@ -74,4 +74,10 @@ class PluginConfig {
         CommitState cstate = getCommitState(perProjectSettings);
         return cstate.commitMessage;
     }
+
+    String getBranchRegexp(Project project) {
+        boolean perProjectSettings = isProjectSettingsLevel(project);
+        CommitState cstate = getCommitState(perProjectSettings);
+        return cstate.branchRegexp;
+    }
 }

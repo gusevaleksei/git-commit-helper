@@ -104,7 +104,9 @@
               </grid>
             </constraints>
             <properties>
+              <labelFor value=""/>
               <text value="{re} - replaced with regexp result"/>
+              <visible value="false"/>
             </properties>
             <clientProperties>
               <html.disable class="java.lang.Boolean" value="false"/>
@@ -116,7 +118,9 @@
                 <preferred-size width="379" height="30"/>
               </grid>
             </constraints>
-            <properties/>
+            <properties>
+              <visible value="false"/>
+            </properties>
           </component>
         </children>
       </grid>

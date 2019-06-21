@@ -56,6 +56,28 @@ public class ApplyTemplateAction extends AnAction implements DumbAware {
         return branch;
     }
 
+    private String applyTemplate(String commitMessage, String branchName, String commitTemplate, String branchRegexp) {
+
+        if (commitTemplate.isEmpty()) {
+            return commitMessage;
+        }
+
+        String finalCommitMessage;
+        if (commitTemplate.toLowerCase().contains(PRESENT_COMMIT_IS_CONTAINS)) {
+            finalCommitMessage = commitTemplate.replaceAll(PRESENT_COMMIT_PLACEHOLDER, commitMessage);
+        } else {
+            finalCommitMessage = commitTemplate + " " + commitMessage;
+        }
+
+        finalCommitMessage = finalCommitMessage.replaceAll(BRANCH_PLACEHOLDER, branchName);
+
+        // regexp need here
+        // if (!branchRegexp.equalsIgnoreCase("")) {
+        // }
+
+        return finalCommitMessage;
+    }
+
     @Override
     public void actionPerformed(AnActionEvent e) {
         final CommitMessageI checkinPanel = getCheckinPanel(e);
@@ -69,22 +91,13 @@ public class ApplyTemplateAction extends AnAction implements DumbAware {
 
         PluginConfig config = PluginConfig.getInstance(project);
 
-        String commitTemplate = config.getCommitMessageTemplate(project);
-        if (!commitTemplate.isEmpty()) {
+        String finalCommitMessage = applyTemplate(
+                presentCommitMessage,
+                branchName,
+                config.getCommitMessageTemplate(project),
+                config.getBranchRegexp(project));
 
-            String finalCommitMessage;
-            if (commitTemplate.toLowerCase().contains(PRESENT_COMMIT_IS_CONTAINS)) {
-                finalCommitMessage = commitTemplate.replaceAll(PRESENT_COMMIT_PLACEHOLDER, presentCommitMessage);
-            } else {
-                finalCommitMessage = commitTemplate + " " + presentCommitMessage;
-            }
-
-            finalCommitMessage = finalCommitMessage.replaceAll(BRANCH_PLACEHOLDER, branchName);
-
-            // regexp need here
-
-            checkinPanel.setCommitMessage(finalCommitMessage);
-        }
+        checkinPanel.setCommitMessage(finalCommitMessage);
     }
 
 

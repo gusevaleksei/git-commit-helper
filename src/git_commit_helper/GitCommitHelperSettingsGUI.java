@@ -57,6 +57,9 @@ public class GitCommitHelperSettingsGUI {
 
         if (!project.isOpen()) {
             setGlobalLevel();
+            globalSettingsRadio.setVisible(false);
+            projectSettingsRadio.setVisible(false);
+
             perProjectSettings = false;
         } else {
             perProjectSettings = config.isProjectSettingsLevel(project);
