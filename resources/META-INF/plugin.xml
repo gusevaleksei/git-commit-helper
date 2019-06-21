@@ -1,17 +1,18 @@
 <idea-plugin>
     <id>GitCommitHelper</id>
     <name>Git Commit Helper</name>
-    <version>0.0.5</version>
+    <version>0.1.1</version>
+    <vendor email="">Aleksei Gusev</vendor>
 
     <description><![CDATA[
     <p>Adds a button to the commit dialog, that replace commit message with a template.</p>
     <a href="https://github.com/gusevaleksei/git-commit-helper">github.com/gusevaleksei/git-commit-helper</a>
     ]]></description>
 
-    <change-notes><![CDATA[
-    <p>0.1.0</p>
-    ]]>
-    </change-notes>
+<!--    <change-notes><![CDATA[-->
+<!--    <p>0.1.0</p>-->
+<!--    ]]>-->
+<!--    </change-notes>-->
 
     <idea-version since-build="135.1230"/>
     <depends>com.intellij.modules.vcs</depends>
