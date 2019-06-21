@@ -5,10 +5,11 @@
 
     <description><![CDATA[
     <p>Adds a button to the commit dialog, that replace commit message with a template.</p>
+    <a href="https://github.com/gusevaleksei/git-commit-helper">github.com/gusevaleksei/git-commit-helper</a>
     ]]></description>
 
     <change-notes><![CDATA[
-    <p>0.0.5</p>
+    <p>0.1.0</p>
     ]]>
     </change-notes>
 
